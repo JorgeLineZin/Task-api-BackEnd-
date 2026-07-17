@@ -5,15 +5,26 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Task::all());
+        $allowedFields = ['id', 'title', 'content', 'created_at', 'updated_at'];
+
+        $fields = array_intersect(
+            explode(',', $request->query('fields', '')),
+            $allowedFields
+        );
+
+        $tasks = Task::get(empty($fields) ? ['*'] : $fields);
+
+        return response()->json($tasks);
+
     }
 
     /**
@@ -31,7 +42,10 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return response()->json($task);
+        return response()->json([
+            'success' => true,
+            'data' => $task,
+        ], 200);
     }
 
     /**
