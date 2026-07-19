@@ -23,7 +23,7 @@ class TaskController extends Controller
 
         $tasks = Task::get(empty($fields) ? ['*'] : $fields);
 
-        return response()->json($tasks);
+        return response()->json($tasks, 200);
 
     }
 
@@ -55,7 +55,7 @@ class TaskController extends Controller
     {
         $task->update($request->validated());
 
-        return response()->json($task);
+        return response()->json($task, 200);
     }
 
     /**
@@ -67,6 +67,6 @@ class TaskController extends Controller
 
         return response()->json([
             'message' => 'Tarefa deletada com sucesso!',
-        ]);
+        ], 200);
     }
 }
